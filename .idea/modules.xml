@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/comicsefigures.iml" filepath="$PROJECT_DIR$/comicsefigures.iml" />
+      <module fileurl="file://$PROJECT_DIR$/comicsefigures_android.iml" filepath="$PROJECT_DIR$/comicsefigures_android.iml" />
+    </modules>
+  </component>
+</project>
