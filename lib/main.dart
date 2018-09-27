@@ -28,6 +28,12 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _updateFigure(int index,Map<String, dynamic> figure){
+    setState(() {
+          _figures[index] = figure;
+        });
+  }
+
   void _deleteProduct(int index) {
     setState(() {
       _figures.removeAt(index);
@@ -52,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         '/figures': (BuildContext context) =>
             FiguresPage(_figures),
         '/catalogcontribute': (BuildContext context) =>
-            CatalogueContribute(_addFigure, _deleteProduct),
+            CatalogueContribute(_addFigure, _updateFigure, _deleteProduct, _figures),
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');

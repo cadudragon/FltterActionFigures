@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/User.dart';
+import '../util/util_validations.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -11,6 +12,8 @@ class AuthPage extends StatefulWidget {
 class _AuthPageContext extends State<AuthPage> {
   final User _user = new User();
   bool _accpetTerms = false;
+
+  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   DecorationImage _buildBackgroundImage() {
     return DecorationImage(
@@ -24,23 +27,38 @@ class _AuthPageContext extends State<AuthPage> {
   }
 
   Widget _buildEmailTextField() {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
-          labelText: "Email", filled: true, fillColor: Colors.white),
+        labelText: "Email",
+        filled: true,
+        fillColor: Colors.white,
+      ),
+      initialValue: 'carlos8eduardo@gmail.com',
+      validator: (String value) {
+        if (value.isEmpty || !UtilValidations.isEmail(value)) {
+          return 'Email is required and should be an valid email.';
+        }
+      },
       keyboardType: TextInputType.emailAddress,
-      onChanged: (String value) {
+      onSaved: (String value) {
         _user.email = value;
       },
     );
   }
 
   Widget _buildPasswordTextField() {
-    return TextField(
+    return TextFormField(
       obscureText: true,
+      initialValue: '1234567',
+      validator: (String value) {
+        if (value.isEmpty || value.length < 6) {
+          return 'Password is required and should be 6+ characters long.';
+        }
+      },
       decoration: InputDecoration(
           labelText: "Password", filled: true, fillColor: Colors.white),
       keyboardType: TextInputType.text,
-      onChanged: (String value) {
+      onSaved: (String value) {
         _user.password = value;
       },
     );
@@ -67,30 +85,17 @@ class _AuthPageContext extends State<AuthPage> {
   }
 
   void _submitForm() {
-    if (_user.email.trim() == "" || _user.password.trim() == "") {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return new AlertDialog(
-              content: Text('Email or Password empty.'),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Close'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            );
-          });
-    } else {
-      Navigator.pushReplacementNamed(context, '/figures');
-    }
+    if (!_formKey.currentState.validate()) return;
+
+    _formKey.currentState.save();
+    Navigator.pushReplacementNamed(context, '/figures');
   }
 
   @override
   Widget build(BuildContext context) {
-    final targertWidth = MediaQuery.of(context).size.width > 550.0 ? 500.0 : MediaQuery.of(context).size.width * 0.95; 
+    final targertWidth = MediaQuery.of(context).size.width > 550.0
+        ? 500.0
+        : MediaQuery.of(context).size.width * 0.95;
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
@@ -103,26 +108,29 @@ class _AuthPageContext extends State<AuthPage> {
         padding: EdgeInsets.all(10.0),
         child: Center(
           child: SingleChildScrollView(
-            child: Container( 
+            child: Container(
               width: targertWidth,
-              child:  Column(
-              children: <Widget>[
-                _buildEmailTextField(),
-                SizedBox(
-                  height: 10.0,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    _buildEmailTextField(),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    _buildPasswordTextField(),
+                    _buildAcceptSwitch(),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    RaisedButton(
+                      child: Text('Login'),
+                      textColor: Colors.white,
+                      onPressed: _submitForm,
+                    ),
+                  ],
                 ),
-                _buildPasswordTextField(),
-                _buildAcceptSwitch(),
-                SizedBox(
-                  height: 10.0,
-                ),
-                RaisedButton(
-                  child: Text('Login'),
-                  textColor: Colors.white,
-                  onPressed: _submitForm,
-                ),
-              ],
-            ),
+              ),
             ),
           ),
         ),
