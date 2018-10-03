@@ -1,9 +1,10 @@
-class User {
-  User(){
-    email = "";
-    password = "";
-  }
-  String email;
-  String password;
+import 'package:flutter/material.dart';
 
+class User {
+
+  final int id;
+  final String email;
+  final String password;  
+  
+  User({@required this.id, @required this.email, @required this.password});
 }

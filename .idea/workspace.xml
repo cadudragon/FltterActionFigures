@@ -3,15 +3,20 @@
   <component name="ChangeListManager">
     <list default="true" id="00ad5af0-7a4a-4d16-be95-05f8c11e0ad5" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/android/gradlew" afterPath="$PROJECT_DIR$/android/gradlew" />
-      <change beforePath="$PROJECT_DIR$/comicsefigures.iml" afterPath="$PROJECT_DIR$/comicsefigures.iml" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" afterPath="$PROJECT_DIR$/lib/main.dart" />
+      <change beforePath="$PROJECT_DIR$/lib/models/Figure.dart" afterPath="$PROJECT_DIR$/lib/models/Figure.dart" />
+      <change beforePath="$PROJECT_DIR$/lib/models/User.dart" afterPath="$PROJECT_DIR$/lib/models/User.dart" />
       <change beforePath="$PROJECT_DIR$/lib/pages/auth.dart" afterPath="$PROJECT_DIR$/lib/pages/auth.dart" />
       <change beforePath="$PROJECT_DIR$/lib/pages/catalogue_contribute.dart" afterPath="$PROJECT_DIR$/lib/pages/catalogue_contribute.dart" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/figure_create_page.dart" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/figure.dart" afterPath="$PROJECT_DIR$/lib/pages/figure.dart" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/figure_edit_page.dart" afterPath="$PROJECT_DIR$/lib/pages/figure_edit_page.dart" />
       <change beforePath="$PROJECT_DIR$/lib/pages/figure_list.dart" afterPath="$PROJECT_DIR$/lib/pages/figure_list.dart" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/figures.dart" afterPath="$PROJECT_DIR$/lib/pages/figures.dart" />
+      <change beforePath="$PROJECT_DIR$/lib/widgets/action_figures.dart" afterPath="$PROJECT_DIR$/lib/widgets/action_figures.dart" />
+      <change beforePath="$PROJECT_DIR$/lib/widgets/figure_card.dart" afterPath="$PROJECT_DIR$/lib/widgets/figure_card.dart" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" afterPath="$PROJECT_DIR$/pubspec.lock" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" afterPath="$PROJECT_DIR$/pubspec.yaml" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -30,7 +35,7 @@
         <entry file="file://$PROJECT_DIR$/lib/main.dart">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
-              <caret line="11" column="18" lean-forward="false" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+              <caret line="15" column="18" lean-forward="false" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -65,13 +70,13 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <option name="show-excluded-files" value="false" />
       </pane>
       <pane id="PackagesPane" />
       <pane id="Scratches" />
-      <pane id="AndroidView" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -296,8 +301,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/main.dart">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/main.dart">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
-          <caret line="11" column="18" lean-forward="false" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+          <caret line="15" column="18" lean-forward="false" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
           <folding />
         </state>
       </provider>

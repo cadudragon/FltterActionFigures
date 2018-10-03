@@ -3,12 +3,6 @@ import './figure_edit_page.dart';
 import './figure_list.dart';
 
 class CatalogueContribute extends StatelessWidget {
-  final Function addFigure;
-  final Function updateFigure;
-  final Function deleteFigure;
-  final List<Map<String, dynamic>> _figures;
-
-  CatalogueContribute(this.addFigure, this.updateFigure, this.deleteFigure, this._figures);
 
   Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
@@ -22,7 +16,7 @@ class CatalogueContribute extends StatelessWidget {
             leading: Icon(Icons.edit),
             title: Text('All Figures'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/');
+              Navigator.pushReplacementNamed(context, '/figures');
             },
           ),
         ],
@@ -54,8 +48,8 @@ class CatalogueContribute extends StatelessWidget {
         //body: FigureManager(startingFigure: 'Cignus Hyoga',),
         body: TabBarView(
           children: <Widget>[
-            FigureEditPage(addFigure: addFigure),
-            FigureListPage(_figures, updateFigure, deleteFigure)
+            FigureEditPage(),
+            FigureListPage()
           ],
         ),
       ),

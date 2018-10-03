@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
-import '../models/User.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../scoped-models/main_model.dart';
 import '../util/util_validations.dart';
 
 class AuthPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _AuthPageContext();
+    return _AuthPageState();
   }
 }
 
-class _AuthPageContext extends State<AuthPage> {
-  final User _user = new User();
-  bool _accpetTerms = false;
-
+class _AuthPageState extends State<AuthPage> {
+  final Map<String, dynamic> _formData = {
+    'email': null,
+    'password': null,
+    'acceptTerms': false
+  };
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   DecorationImage _buildBackgroundImage() {
@@ -41,7 +45,7 @@ class _AuthPageContext extends State<AuthPage> {
       },
       keyboardType: TextInputType.emailAddress,
       onSaved: (String value) {
-        _user.email = value;
+        _formData['email'] = value;
       },
     );
   }
@@ -59,7 +63,7 @@ class _AuthPageContext extends State<AuthPage> {
           labelText: "Password", filled: true, fillColor: Colors.white),
       keyboardType: TextInputType.text,
       onSaved: (String value) {
-        _user.password = value;
+         _formData['password'] = value;
       },
     );
   }
@@ -70,10 +74,10 @@ class _AuthPageContext extends State<AuthPage> {
         color: Colors.black26,
       ),
       child: SwitchListTile(
-        value: _accpetTerms,
+        value:   _formData['acceptTerms'],
         onChanged: (bool value) {
           setState(() {
-            _accpetTerms = value;
+            _formData['acceptTerms'] = value;
           });
         },
         title: Text(
@@ -84,10 +88,11 @@ class _AuthPageContext extends State<AuthPage> {
     );
   }
 
-  void _submitForm() {
+  void _submitForm(Function login) {
     if (!_formKey.currentState.validate()) return;
 
     _formKey.currentState.save();
+    login(_formData['email'],_formData['password']);
     Navigator.pushReplacementNamed(context, '/figures');
   }
 
@@ -123,10 +128,15 @@ class _AuthPageContext extends State<AuthPage> {
                     SizedBox(
                       height: 10.0,
                     ),
-                    RaisedButton(
-                      child: Text('Login'),
-                      textColor: Colors.white,
-                      onPressed: _submitForm,
+                    ScopedModelDescendant<MainModel>(
+                      builder: (BuildContext context, Widget child,
+                          MainModel model) {
+                        return RaisedButton(
+                          child: Text('Login'),
+                          textColor: Colors.white,
+                          onPressed: () => _submitForm(model.login),
+                        );
+                      },
                     ),
                   ],
                 ),

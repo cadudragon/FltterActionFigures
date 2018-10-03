@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import '../util/util_validations.dart';
 
-class FigureEditPage extends StatefulWidget {
-  final Function addFigure;
-  final Function updateFigure;
-  final Map<String, dynamic> figure;
-  final int figureIndex;
+import '../scoped-models/main_model.dart';
+import '../models/Figure.dart';
 
-  FigureEditPage(
-      {this.addFigure, this.updateFigure, this.figure, this.figureIndex});
+class FigureEditPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return FigureEditPageState();
@@ -26,10 +23,10 @@ class FigureEditPageState extends State<FigureEditPage> {
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  Widget _buildTitleTextField() {
+  Widget _buildTitleTextField(Figure figure) {
     return TextFormField(
       decoration: InputDecoration(labelText: "Figure Title"),
-      initialValue: widget.figure == null ? '' : widget.figure['title'],
+      initialValue: figure == null ? '' : figure.title,
       validator: (String value) {
         if (value.isEmpty || value.length < 5) {
           return 'Title is required and should be 5+ characters long';
@@ -41,10 +38,10 @@ class FigureEditPageState extends State<FigureEditPage> {
     );
   }
 
-  Widget buildDescripttionTextField() {
+  Widget buildDescripttionTextField(Figure figure) {
     return TextFormField(
         maxLines: 4,
-        initialValue: widget.figure == null ? '' : widget.figure['description'],
+        initialValue: figure == null ? '' : figure.description,
         decoration: InputDecoration(labelText: "Enter the figure Description"),
         validator: (String value) {
           if (value.isEmpty || value.length < 10) {
@@ -57,11 +54,10 @@ class FigureEditPageState extends State<FigureEditPage> {
         });
   }
 
-  Widget _buildPriceTextField() {
+  Widget _buildPriceTextField(Figure figure) {
     return TextFormField(
         decoration: InputDecoration(labelText: "Enter the price"),
-        initialValue:
-            widget.figure == null ? '' : widget.figure['price'].toString(),
+        initialValue: figure == null ? '' : figure.price.toString(),
         validator: (String value) {
           if (value.isEmpty || !UtilValidations.isDecimal(value)) {
             return 'Price is required and should be a number.';
@@ -73,7 +69,20 @@ class FigureEditPageState extends State<FigureEditPage> {
         });
   }
 
-  Widget _buildPageContent(BuildContext context) {
+  Widget _buildSubmitButton() {
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return RaisedButton(
+          child: Text('Save'),
+          textColor: Colors.white,
+          onPressed: () => _submitForm(model.addFigure, model.updateFigure,
+              model.selectFigure, model.selectedFigureIndex),
+        );
+      },
+    );
+  }
+
+  Widget _buildPageContent(BuildContext context, Figure figure) {
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550.0 ? 550.0 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
@@ -91,18 +100,14 @@ class FigureEditPageState extends State<FigureEditPage> {
               horizontal: targetPadding,
             ),
             children: <Widget>[
-              _buildTitleTextField(),
+              _buildTitleTextField(figure),
               Text(_formData['title'] == null ? '' : _formData['title']),
-              buildDescripttionTextField(),
-              _buildPriceTextField(),
+              buildDescripttionTextField(figure),
+              _buildPriceTextField(figure),
               SizedBox(
                 height: 10.0,
               ),
-              RaisedButton(
-                child: Text('Save'),
-                textColor: Colors.white,
-                onPressed: _submitForm,
-              )
+              _buildSubmitButton()
               // GestureDetector(
               //   onTap: _submitForm,
               //   child: Container(
@@ -118,32 +123,41 @@ class FigureEditPageState extends State<FigureEditPage> {
     );
   }
 
-  void _submitForm() {
+  void _submitForm(
+      Function addFigure, Function updateFigure, Function setSelectedProduct,
+      [int selectedFigureIndex]) {
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
 
-    if (widget.figure == null) {
-      widget.addFigure(_formData);
+    if (selectedFigureIndex == null) {
+      addFigure(_formData['title'], _formData['description'],
+          _formData['image'], _formData['price']);
     } else {
-      widget.updateFigure(widget.figureIndex, _formData);
+      updateFigure(_formData['title'], _formData['description'],
+          _formData['image'], _formData['price']);
     }
 
-    Navigator.pushReplacementNamed(context, '/figures');
+    Navigator.pushReplacementNamed(context, '/figures')
+        .then((_) => setSelectedProduct(null));
   }
 
   @override
   Widget build(BuildContext context) {
-    final Widget pageContent = _buildPageContent(context);
-
-    return widget.figure == null
-        ? pageContent
-        : Scaffold(
-            appBar: AppBar(
-              title: Text('Edit Figure'),
-            ),
-            body: pageContent,
-          );
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        final Widget pageContent =
+            _buildPageContent(context, model.selectedFigure);
+        return model.selectedFigureIndex == null
+            ? pageContent
+            : Scaffold(
+                appBar: AppBar(
+                  title: Text('Edit Figure'),
+                ),
+                body: pageContent,
+              );
+      },
+    );
   }
 }
