@@ -6,8 +6,9 @@ import '../scoped-models/main_model.dart';
 import '../models/Figure.dart';
 
 class FigurePage extends StatelessWidget {
-  final int figureIndex;
-  FigurePage(this.figureIndex);
+  final Figure figure;
+
+  FigurePage(this.figure);
 
   Widget _buildAdressPriceRow(double price) {
     return Row(
@@ -40,10 +41,7 @@ class FigurePage extends StatelessWidget {
       print('Back button presssed');
       Navigator.pop(context, false);
       return Future.value(false);
-    }, child: ScopedModelDescendant<MainModel>(
-      builder: (BuildContext context, Widget child, MainModel model) {
-        final Figure figure = model.allFigures[figureIndex];
-        return Scaffold(
+    }, child: Scaffold(
           appBar: AppBar(
             title: Text(figure.title),
           ),
@@ -51,7 +49,12 @@ class FigurePage extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset(figure.image),
+              FadeInImage(
+                image: NetworkImage(figure.image),
+                height: 300.0,
+                fit: BoxFit.cover,
+                placeholder: AssetImage('assets/images/saintseya_bg01.jpg'),
+              ),
               Container(
                 padding: EdgeInsets.all(10.0),
                 child: TitleDefault(figure.title),
@@ -66,8 +69,6 @@ class FigurePage extends StatelessWidget {
               )
             ],
           ),
-        );
-      },
-    ));
+        ));
   }
 }

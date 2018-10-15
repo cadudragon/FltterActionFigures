@@ -14,30 +14,29 @@ class FigureCard extends StatelessWidget {
   FigureCard(this.figure, this.figureIndex);
 
   Widget _buildActionButtons(BuildContext context) {
-    return ButtonBar(
-      alignment: MainAxisAlignment.center,
-      children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.info),
-          color: Theme.of(context).accentColor,
-          onPressed: () => Navigator.pushNamed<bool>(
-              context, '/figure/' + figureIndex.toString()),
-        ),
-        ScopedModelDescendant<MainModel>(
-          builder: (BuildContext context, Widget child, MainModel model) {
-            return IconButton(
-              icon: Icon(model.allFigures[figureIndex].isFavorite
-                  ? Icons.favorite
-                  : Icons.favorite_border),
-              color: Colors.red,
-              onPressed: () {
-                model.selectFigure(figureIndex);
-                model.toggleFigureFavoriteStatus();
-              },
-            );
-          },
-        )
-      ],
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.info),
+                color: Theme.of(context).accentColor,
+                onPressed: () => Navigator.pushNamed<bool>(
+                    context, '/figure/' + model.allFigures[figureIndex].id),
+              ),
+              IconButton(
+                icon: Icon(model.allFigures[figureIndex].isFavorite
+                    ? Icons.favorite
+                    : Icons.favorite_border),
+                color: Colors.red,
+                onPressed: () {
+                  model.selectFigure(model.allFigures[figureIndex].id);
+                  model.toggleFigureFavoriteStatus();
+                },
+              ),
+            ]);
+      },
     );
   }
 
@@ -46,7 +45,12 @@ class FigureCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.asset(figure.image),
+          FadeInImage(
+            image: NetworkImage(figure.image),
+            height: 300.0,
+            fit: BoxFit.cover,
+            placeholder: AssetImage('assets/images/saintseya_bg01.jpg'),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

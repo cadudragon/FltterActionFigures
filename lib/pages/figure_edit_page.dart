@@ -18,7 +18,7 @@ class FigureEditPageState extends State<FigureEditPage> {
     'title': null,
     'description': null,
     'price': null,
-    'image': 'assets/images/hyoga_v1.jpg'
+    ' ': 'assets/images/hyoga_v1.jpg'
   };
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
@@ -72,12 +72,17 @@ class FigureEditPageState extends State<FigureEditPage> {
   Widget _buildSubmitButton() {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
-        return RaisedButton(
-          child: Text('Save'),
-          textColor: Colors.white,
-          onPressed: () => _submitForm(model.addFigure, model.updateFigure,
-              model.selectFigure, model.selectedFigureIndex),
-        );
+        return model.isLoading
+            ? Center(child: CircularProgressIndicator())
+            : RaisedButton(
+                child: Text('Save'),
+                textColor: Colors.white,
+                onPressed: () => _submitForm(
+                    model.addFigure,
+                    model.updateFigure,
+                    model.selectFigure,
+                    model.selectedFigureIndex),
+              );
       },
     );
   }
@@ -131,30 +136,56 @@ class FigureEditPageState extends State<FigureEditPage> {
     }
     _formKey.currentState.save();
 
-    if (selectedFigureIndex == null) {
+    if (selectedFigureIndex == -1) {
       addFigure(_formData['title'], _formData['description'],
-          _formData['image'], _formData['price']);
+              _formData['image'], _formData['price'])
+          .then((bool succedRequest) {
+        if (succedRequest) {
+          Navigator.pushReplacementNamed(context, '/figures')
+              .then((_) => setSelectedProduct(null));
+        } else {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Something went wrong'),
+                  content: Text('Please try Again'),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Okay'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    )
+                  ],
+                );
+              });
+        }
+      });
     } else {
       updateFigure(_formData['title'], _formData['description'],
-          _formData['image'], _formData['price']);
+              _formData['image'], _formData['price'])
+          .then((_) => Navigator.pushReplacementNamed(context, '/figures')
+              .then((_) => setSelectedProduct(null)));
     }
-
-    Navigator.pushReplacementNamed(context, '/figures')
-        .then((_) => setSelectedProduct(null));
   }
 
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
+      rebuildOnChange: false,
       builder: (BuildContext context, Widget child, MainModel model) {
         final Widget pageContent =
             _buildPageContent(context, model.selectedFigure);
-        return model.selectedFigureIndex == null
+        return model.selectedFigureIndex == -1
             ? pageContent
             : Scaffold(
                 appBar: AppBar(
-                  title: Text('Edit Figure'),
-                ),
+                    title: Text('Edit Figure'),
+                    leading: new IconButton(
+                        icon: new Icon(Icons.arrow_back),
+                        onPressed: () {
+                          model.clearSelectedFigure();
+                          Navigator.pop(context, true);
+                        })),
                 body: pageContent,
               );
       },

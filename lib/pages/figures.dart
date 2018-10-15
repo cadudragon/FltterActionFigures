@@ -5,7 +5,24 @@ import '../scoped-models/main_model.dart';
 
 import '../widgets/action_figures.dart';
 
-class FiguresPage extends StatelessWidget {
+class FiguresPage extends StatefulWidget {
+  final MainModel model;
+
+  FiguresPage(this.model);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _FiguresPageState();
+  }
+}
+
+class _FiguresPageState extends State<FiguresPage> {
+  @override
+  initState() {
+    widget.model.fetchFigures();
+    super.initState();
+  }
+
   Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
       child: Column(
@@ -23,6 +40,23 @@ class FiguresPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildFiguresList() {
+    return ScopedModelDescendant(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        Widget content = Center(child: Text('No figures found!'));
+        if (model.displayedFigures.length > 0 && !model.isLoading) {
+          content = ActionFigures();  
+        } else if (model.isLoading) {
+          content = Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        return RefreshIndicator(onRefresh: model.fetchFigures, child: content,);
+      },
     );
   }
 
@@ -48,7 +82,7 @@ class FiguresPage extends StatelessWidget {
         ],
       ),
       //body: FigureManager(startingFigure: 'Cignus Hyoga',),
-      body: ActionFigures(),
+      body: _buildFiguresList(),
     );
   }
 }

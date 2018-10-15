@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Figure {
+  final String id;
   final String title;
   final String description;
   final double price;
@@ -10,6 +11,7 @@ class Figure {
   final int userId;
 
   Figure({
+    @required this.id,
     @required this.title,
     @required this.description,
     @required this.price,

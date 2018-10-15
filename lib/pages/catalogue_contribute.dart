@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import './figure_edit_page.dart';
 import './figure_list.dart';
+import '../scoped-models/main_model.dart';
 
 class CatalogueContribute extends StatelessWidget {
+  final MainModel model;
+  CatalogueContribute(this.model);
 
   Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
@@ -47,10 +50,7 @@ class CatalogueContribute extends StatelessWidget {
         ),
         //body: FigureManager(startingFigure: 'Cignus Hyoga',),
         body: TabBarView(
-          children: <Widget>[
-            FigureEditPage(),
-            FigureListPage()
-          ],
+          children: <Widget>[FigureEditPage(), FigureListPage(model)],
         ),
       ),
     );

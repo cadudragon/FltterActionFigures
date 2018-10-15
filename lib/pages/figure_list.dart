@@ -3,12 +3,28 @@ import 'package:scoped_model/scoped_model.dart';
 import './figure_edit_page.dart';
 import '../scoped-models/main_model.dart';
 
-class FigureListPage extends StatelessWidget {
+class FigureListPage extends StatefulWidget {
+  final MainModel model;
+  FigureListPage(this.model);
+  @override
+  State<StatefulWidget> createState() {
+    return _FigureListPageState();
+  }
+}
+
+class _FigureListPageState extends State<FigureListPage> {
+  @override
+  initState() {
+    super.initState();
+    widget.model.fetchFigures(); 
+  }
+
   Widget _buildEditButton(BuildContext context, int index, MainModel model) {
+    
     return IconButton(
       icon: Icon(Icons.edit),
       onPressed: () {
-        model.selectFigure(index);
+        model.selectFigure(model.allFigures[index].id);
 
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -16,7 +32,9 @@ class FigureListPage extends StatelessWidget {
               return FigureEditPage();
             },
           ),
-        );
+        ).then((_) {
+          model.selectFigure(null);
+        });
       },
     );
   }
@@ -31,7 +49,7 @@ class FigureListPage extends StatelessWidget {
               key: Key(model.allFigures[index].title),
               onDismissed: (DismissDirection direction) {
                 if (direction == DismissDirection.endToStart) {
-                  model.selectFigure(index);
+                  model.selectFigure(model.allFigures[index].id);
                   model.deleteFigure();
                 }
               },
@@ -42,7 +60,7 @@ class FigureListPage extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: AssetImage(
+                      backgroundImage: NetworkImage(
                         model.allFigures[index].image,
                       ),
                     ),

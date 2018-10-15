@@ -3,7 +3,7 @@ import 'package:scoped_model/scoped_model.dart';
 //import 'package:flutter/rendering.dart';
 
 import './scoped-models/main_model.dart';
-
+import './models/Figure.dart';
 
 import './pages/catalogue_contribute.dart';
 import './pages/figure.dart';
@@ -26,9 +26,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    final MainModel model = MainModel();
     // TODO: implement build
     return ScopedModel<MainModel>(
-      model: MainModel(),
+      model: model,
       child: MaterialApp(
         //debugShowMaterialGrid: true,
         theme: ThemeData(
@@ -39,8 +40,9 @@ class _MyAppState extends State<MyApp> {
         //home: AuthPage(),
         routes: {
           '/': (BuildContext context) => AuthPage(),
-          '/figures': (BuildContext context) => FiguresPage(),
-          '/catalogcontribute': (BuildContext context) => CatalogueContribute(),
+          '/figures': (BuildContext context) => FiguresPage(model),
+          '/catalogcontribute': (BuildContext context) =>
+              CatalogueContribute(model),
         },
         onGenerateRoute: (RouteSettings settings) {
           final List<String> pathElements = settings.name.split('/');
@@ -48,17 +50,19 @@ class _MyAppState extends State<MyApp> {
             return null;
           }
           if (pathElements[1] == 'figure') {
-            final int index = int.parse(pathElements[2]);
+            final String figureId = pathElements[2];
+            final Figure figure = model.allFigures.firstWhere((Figure figure) {
+              return figure.id == figureId;
+            });
             return MaterialPageRoute<bool>(
-              builder: (BuildContext context) =>
-                  FigurePage(index),
+              builder: (BuildContext context) => FigurePage(figure),
             );
           }
           return null;
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(
-              builder: (BuildContext context) => FiguresPage());
+              builder: (BuildContext context) => FiguresPage(model));
         },
       ),
     );
