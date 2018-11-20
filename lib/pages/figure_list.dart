@@ -16,7 +16,7 @@ class _FigureListPageState extends State<FigureListPage> {
   @override
   initState() {
     super.initState();
-    widget.model.fetchFigures(); 
+    widget.model.fetchFigures(onlyForUser:true); 
   }
 
   Widget _buildEditButton(BuildContext context, int index, MainModel model) {

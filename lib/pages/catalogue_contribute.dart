@@ -3,6 +3,8 @@ import './figure_edit_page.dart';
 import './figure_list.dart';
 import '../scoped-models/main_model.dart';
 
+import '../widgets/ui_widgets/logout_list_tile.dart';
+
 class CatalogueContribute extends StatelessWidget {
   final MainModel model;
   CatalogueContribute(this.model);
@@ -19,9 +21,12 @@ class CatalogueContribute extends StatelessWidget {
             leading: Icon(Icons.edit),
             title: Text('All Figures'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/figures');
+              Navigator.pushReplacementNamed(context, '/');
             },
           ),
+          Divider(),
+          LogoutListTile(),
+
         ],
       ),
     );

@@ -4,6 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 import '../scoped-models/main_model.dart';
 
 import '../widgets/action_figures.dart';
+import '../widgets/ui_widgets/logout_list_tile.dart';
 
 class FiguresPage extends StatefulWidget {
   final MainModel model;
@@ -38,6 +39,8 @@ class _FiguresPageState extends State<FiguresPage> {
               Navigator.pushReplacementNamed(context, '/catalogcontribute');
             },
           ),
+          Divider(),
+          LogoutListTile(),
         ],
       ),
     );
@@ -48,14 +51,17 @@ class _FiguresPageState extends State<FiguresPage> {
       builder: (BuildContext context, Widget child, MainModel model) {
         Widget content = Center(child: Text('No figures found!'));
         if (model.displayedFigures.length > 0 && !model.isLoading) {
-          content = ActionFigures();  
+          content = ActionFigures();
         } else if (model.isLoading) {
           content = Center(
             child: CircularProgressIndicator(),
           );
         }
 
-        return RefreshIndicator(onRefresh: model.fetchFigures, child: content,);
+        return RefreshIndicator(
+          onRefresh: model.fetchFigures,
+          child: content,
+        );
       },
     );
   }

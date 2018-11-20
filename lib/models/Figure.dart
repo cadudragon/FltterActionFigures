@@ -8,7 +8,7 @@ class Figure {
   final String image;
   final bool isFavorite;
   final String userEmail;
-  final int userId;
+  final String userId;
 
   Figure({
     @required this.id,
