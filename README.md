@@ -1,8 +1,5 @@
 # comicsefigures
 
-A new Flutter project.
+A new Flutter project to manage action figures collection.
 
-## Getting Started
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
